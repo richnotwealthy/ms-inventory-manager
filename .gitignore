@@ -1,0 +1,15 @@
+# prod keys
+src/db/config-prod.js
+
+# don't track changes to specific dev configs
+src/db/config-dev.js
+
+# dependencies
+node_modules
+
+# production
+build
+
+# misc
+.DS_Store
+npm-debug.log

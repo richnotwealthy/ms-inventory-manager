@@ -1,0 +1,25 @@
+{
+    "presets": [
+		"env",
+        "react",
+        "stage-0"
+    ],
+    "env": {
+        "server": {
+            "plugins": [
+                [
+                    "css-modules-transform", {
+                        "generateScopedName": "[hash:8]",
+                        "extensions": [".css"]
+                    }
+                ],
+				[
+					"import", {
+						"libraryName": "antd",
+						"style": "css"
+					}
+				]
+            ]
+        }
+    }
+}
