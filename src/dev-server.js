@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 
+var db = require('./db/db');
+
 var path = require('path');
 var config = require('../config/webpack.config.dev');
 var webpack = require('webpack');
@@ -48,6 +50,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 app.use('/', router);
+app.use('/db', db);
 
 module.exports = function(port) {
     var server = app.listen(port, function() {

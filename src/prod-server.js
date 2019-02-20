@@ -4,6 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var path = require('path');
+var db = require('./db/db');
 
 var DEFAULT_PORT = process.env.PORT || 9000;
 
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 app.use('/', router);
+app.use('/db', db);
 
 var server = app.listen(DEFAULT_PORT, function() {
     console.log('listening on', DEFAULT_PORT);
