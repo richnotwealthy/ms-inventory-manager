@@ -42,6 +42,7 @@ class LendableList extends Component {
 						</div>
 					)}
 				>
+          {JSON.stringify(this.state.allLendables)}
 				</Card>
 				<LendableCreator
 					actions={{

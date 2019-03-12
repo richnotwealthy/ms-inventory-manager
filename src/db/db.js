@@ -27,6 +27,15 @@ router.post('/new/room', (req, res) => {
 	});
 });
 
+// deletes room
+router.post('/delete/room', (req, res) => {
+	const { rid } = req.body;
+
+	Rooms.findOne({ where: { rid } }).then(room => {
+		room.destroy().then(r => res.json(r));
+	});
+});
+
 // gets a raw array of all lendables in the database (stuff we lend out)
 router.get('/get/lendables', (req, res) => {
 	Lendables.findAll({ raw: true, order: [['lid', 'ASC']] }).then(lendables => {
@@ -43,21 +52,37 @@ router.post('/new/lendable', (req, res) => {
 	});
 });
 
-// deletes room
-router.post('/delete/room', (req, res) => {
-	const { rid } = req.body;
-
-	Rooms.findOne({ where: { rid } }).then(room => {
-		room.destroy().then(r => res.json(r));
-	});
-});
-
 // deletes lendable
 router.post('/delete/lendable', (req, res) => {
 	const { lid } = req.body;
 
 	Lendables.findOne({ where: { lid } }).then(lndble => {
 		lndble.destroy().then(r => res.json(r));
+	});
+});
+
+// gets a raw array of workers
+router.get('/get/workers', (req, res) => {
+	Workers.findAll({ raw: true, order: [['netid', 'ASC']] }).then(workers => {
+		res.json(workers);
+	});
+});
+
+// creates new worker
+router.post('/new/worker', (req, res) => {
+	const { netid, wname } = req.body;
+
+	Workers.create({ netid, wname }).then(r => {
+		res.json(r);
+	});
+});
+
+// deletes worker
+router.post('/delete/worker', (req, res) => {
+	const { netid } = req.body;
+
+	Workers.findOne({ where: { netid } }).then(worker => {
+		worker.destroy().then(r => res.json(r));
 	});
 });
 

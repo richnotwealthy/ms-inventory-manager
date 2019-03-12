@@ -1,6 +1,8 @@
 import './App.css'
 import React, {Component} from 'react'
 import RoomList from './components/RoomList'
+import LendableList from './components/LendableList'
+import WorkerList from './components/WorkerList'
 import {Layout, Menu, Icon} from 'antd'
 const {Content, Sider} = Layout
 const {Item} = Menu
@@ -43,9 +45,9 @@ class App extends Component {
 						</Menu>
 					</Sider>
 					<Content style={{ padding: 24 }}>
-						{this.state.page === 'rooms' && (<RoomList title='Rooms' />)}
-						{this.state.page === 'lendables' && (<span>Lendables</span>)}
-						{this.state.page === 'workers' && (<span>Employees</span>)}
+            {this.state.page === 'rooms' && (<RoomList title='Rooms' />)}
+            {this.state.page === 'lendables' && (<LendableList title='Lendables' />)}
+						{this.state.page === 'workers' && (<WorkerList title='Employees' />)}
 					</Content>
 				</Layout>
 			</div>

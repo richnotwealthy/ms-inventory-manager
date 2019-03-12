@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import WorkerCreator from './WorkerCreator'
 import WorkerDeleter from './WorkerDeleter'
 import axios from 'axios'
-import {Card, List, Button, Avatar} from 'antd'
+import {Card, Button} from 'antd'
 
 class WorkerList extends Component {
 	state = {
@@ -42,7 +42,7 @@ class WorkerList extends Component {
 						</div>
 					)}
 				>
-
+          {JSON.stringify(this.state.allWorkers)}
 				</Card>
 				<WorkerCreator
 					actions={{
