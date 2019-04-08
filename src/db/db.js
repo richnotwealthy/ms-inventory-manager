@@ -61,6 +61,26 @@ router.post('/delete/lendable', (req, res) => {
 	});
 });
 
+// should be passing in an object with matching lid  but new rid
+router.post('/set/lendable/room', (req, res) => {
+	const { lid, rid } = req.body;
+
+	Lendables.findOne({ where: { lid }}).then(lendable => {
+		lendable.rid = rid;
+		lendable.save().then(r => res.json(r));
+	});
+});
+
+// should be passing in an object with matching lid  but new lstatus
+router.post('/set/lendable/status', (req, res) => {
+	const { lid, lstatus } = req.body;
+
+	Lendables.findOne({ where: { lid }}).then(lendable => {
+		lendable.lstatus = lstatus;
+		lendable.save().then(r => res.json(r));
+	});
+});
+
 // gets a raw array of workers
 router.get('/get/workers', (req, res) => {
 	Workers.findAll({ raw: true, order: [['netid', 'ASC']] }).then(workers => {
