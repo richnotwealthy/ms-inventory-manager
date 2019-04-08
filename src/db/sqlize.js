@@ -29,11 +29,9 @@ const Rooms = sequelize.define('rooms', {
 }, { timestamps: false });
 
 const Equipment = sequelize.define('equipment', {
-	eid: { type: Sequelize.STRING(25), primaryKey: true },
-  ename: Sequelize.STRING(25),
-	etype: Sequelize.STRING(25),
+	etype: { type: Sequelize.STRING(25), primaryKey: true },
 	estatus: Sequelize.STRING(1),
-  rid: Sequelize.STRING(10)
+  rid: { type: Sequelize.STRING(10), primaryKey: true }
 }, { timestamps: false });
 
 const Lendables = sequelize.define('lendables', {
@@ -59,6 +57,29 @@ const HistoryWorkers = sequelize.define('histories_workers', {
 	htimestamp: { type: Sequelize.DATE, primaryKey: true },
 	netid: { type: Sequelize.STRING(10), primaryKey: true }
 }, { timestamps: false });
+
+History.hasMany(HistoryWorkers, {
+  foreignKey: 'rid',
+  scope: {
+    htimestamp: sequelize.where(
+      sequelize.col('histories.htimestamp'),
+      '=',
+      sequelize.col('histories_workers.htimestamp')
+    )
+  }
+});
+Workers.hasMany(HistoryWorkers, { foreignKey: 'netid' });
+HistoryWorkers.hasMany(Workers, { foreignKey: 'netid' });
+HistoryWorkers.hasMany(History, {
+  foreignKey: 'rid',
+  scope: {
+    htimestamp: sequelize.where(
+      sequelize.col('histories_workers.htimestamp'),
+      '=',
+      sequelize.col('histories.htimestamp')
+    )
+  }
+});
 
 module.exports = {
 	sequelize,

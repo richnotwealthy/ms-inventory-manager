@@ -37,12 +37,10 @@ CREATE TABLE `lendables` (
 DROP TABLE IF EXISTS `equipment`;
 
 CREATE TABLE `equipment` (
-  `eid` varchar(25) NOT NULL,
-  `ename` varchar(25) NOT NULL,
   `etype` varchar(25) NOT NULL,
   `estatus` varchar(1) NOT NULL,
   `rid` varchar(10) NOT NULL,
-  PRIMARY KEY (`eid`),
+  PRIMARY KEY (`etype`,`rid`),
   KEY `rid_idx` (`rid`),
   CONSTRAINT `equipment_room` FOREIGN KEY (`rid`) REFERENCES `rooms` (`rid`) ON DELETE CASCADE ON UPDATE CASCADE
 );

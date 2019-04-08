@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const _ = require('lodash');
 
-var {
+const {
 	sequelize,
 	Rooms,
 	Equipment,
@@ -36,10 +37,94 @@ router.post('/delete/room', (req, res) => {
 	});
 });
 
+// should be passing in an object with matching rid  but new rstatus
+router.post('/set/room', (req, res) => {
+	const { rid, rstatus } = req.body;
+
+	Rooms.findOne({ where: { rid }}).then(room => {
+		room.rstatus = rstatus;
+		room.save().then(r => res.json(r));
+	});
+});
+
+// creates new equipment and assigns to room
+router.post('/new/equipment', (req, res) => {
+	const { rid, etype, estatus } = req.body;
+
+	Equipment.create({ rid, etype, estatus }).then(r => {
+		res.json(r);
+	});
+});
+
+// gets a raw array of all equipment in the database (stuff in rooms)
+router.get('/get/equipment', (req, res) => {
+	Equipment.findAll({ raw: true, order: [['etype', 'ASC']] }).then(equipment => {
+		res.json(equipment);
+	});
+});
+
+// should be passing in an object with matching rid and etype but new estatus
+router.post('/set/equipment', (req, res) => {
+	const { rid, etype, estatus } = req.body;
+
+	Equipment.findOne({ where: { rid, etype }}).then(eqpmt => {
+		eqpmt.estatus = estatus;
+		eqpmt.save().then(r => res.json(r));
+	});
+});
+
+// deletes equipment
+router.post('/delete/equipment', (req, res) => {
+	const { rid, etype } = req.body;
+
+	Equipment.findOne({ where: { rid, etype } }).then(eqpmt => {
+		eqpmt.destroy().then(r => res.json(r));
+	});
+});
+
+// creates new log to histories
+router.post('/new/history', (req, res) => {
+	const { rid, hworkerList, hdescription } = req.body;
+
+	History.create({ rid, hdescription }).then(r => {
+    hworkerList.forEach(netid => {
+      HistoryWorkers.create({ rid: r.rid, htimestamp: r.htimestamp, netid })
+    });
+
+		res.json(r);
+	});
+});
+
+// gets a raw array of history for the rooms in the database
+router.get('/get/history', (req, res) => {
+	History.findAll({
+    raw: true,
+    include: HistoryWorkers,
+    order: [['htimestamp', 'DESC']]
+  }).then(history => {
+		res.json(_.map(_.groupBy(history, h => h.rid + h.htimestamp), h => {
+      const hworkerList = _.map(h, 'histories_workers.netid');
+      return {
+        rid: h[0].rid,
+        htimestamp: h[0].htimestamp,
+        hdescription: h[0].hdescription,
+        hworkerList
+      }
+    }));
+	});
+});
+
 // gets a raw array of all lendables in the database (stuff we lend out)
 router.get('/get/lendables', (req, res) => {
 	Lendables.findAll({ raw: true, order: [['lid', 'ASC']] }).then(lendables => {
 		res.json(lendables);
+	});
+});
+
+// gets a raw lendable object based on lid
+router.post('/get/lendable', (req, res) => {
+	Lendables.findOne({ where: { ...req.body }, raw: true }).then(lendable => {
+		res.json(lendable);
 	});
 });
 
