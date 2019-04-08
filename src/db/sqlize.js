@@ -1,9 +1,7 @@
 const Sequelize = require('sequelize');
 
-// DATABASE_URL environment variable for PostgreSQL
 const DATABASE_URL = process.env.DATABASE_URL || 'mysql://root:password@localhost:3306/msim'
 
-// make a config file with the proper postgres config
 const sequelize = new Sequelize(DATABASE_URL,
 	{
 		dialect: 'mysql',

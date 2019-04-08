@@ -29,7 +29,7 @@ Set these in the process environment to change things up quickly and easily for 
 
 **PORT** = expose the http server on this port
 
-**DATABASE_URL** = the location and credentials for accessing the PostgreSQL db, (ex. 'mysql://root:password@localhost:3306/msim')
+**DATABASE_URL** = the location and credentials for accessing the MySQL db, (ex. 'mysql://root:password@localhost:3306/msim')
 
 ---
 
