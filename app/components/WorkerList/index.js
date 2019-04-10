@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import WorkerCreator from './WorkerCreator'
 import WorkerDeleter from './WorkerDeleter'
 import axios from 'axios'
-import {Card, Button} from 'antd'
+import {Card, List, Button, Avatar} from 'antd'
 
 class WorkerList extends Component {
 	state = {
@@ -19,6 +19,24 @@ class WorkerList extends Component {
 
 	componentDidMount() {
 		this.getAllWorkers()
+	}
+
+	renderWorkerList = () => {
+		return (
+			<List
+				itemLayout='horizontal'
+				dataSource={this.state.allWorkers}
+				renderItem={worker => (
+					<List.Item>
+						<List.Item.Meta
+							avatar={<Avatar>{worker.wname[0]}</Avatar>}
+							title={(<span style={{ fontWeight: 'bold' }}>{worker.wname}</span>)}
+						/>
+						<span style={{ fontStyle: 'italic' }}>{worker.netid}</span>
+					</List.Item>
+				)}
+			/>
+		)
 	}
 
 	render() {
@@ -42,7 +60,7 @@ class WorkerList extends Component {
 						</div>
 					)}
 				>
-          {JSON.stringify(this.state.allWorkers)}
+					{this.renderWorkerList()}
 				</Card>
 				<WorkerCreator
 					actions={{
