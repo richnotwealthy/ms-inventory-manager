@@ -96,16 +96,27 @@ class RoomList extends Component {
 				etype: eq.etype,
 				estatus: newEqStatus
 			}).then(res => {
-				axios.post('/db/set/room', {
-					rid: eq.rid,
-					rstatus: newRoomStatus
-				}).then(res => {
-					this.getAllRooms()
-					this.getAllEquipment()
-				})
+        this.updateRoomStatus(eq.rid, newRoomStatus)
 			})
 		}
 	}
+
+  handleRoomStatusUpdate = rid => {
+    return e => {
+      const newRoomStatus = e.key
+      this.updateRoomStatus(rid, newRoomStatus)
+    }
+  }
+
+  updateRoomStatus = (rid, newRoomStatus) => {
+    axios.post('/db/set/room', {
+      rid,
+      rstatus: newRoomStatus
+    }).then(res => {
+      this.getAllRooms()
+      this.getAllEquipment()
+    })
+  }
 
 	removeLndble = lid => {
 		axios.post('/db/set/lendable/room', {
@@ -135,13 +146,7 @@ class RoomList extends Component {
 			}
 
 			axios.post('/db/delete/equipment', eqpmt).then(res => {
-				axios.post('/db/set/room', {
-					rid: eqpmt.rid,
-					rstatus: newRoomStatus
-				}).then(res => {
-					this.getAllRooms()
-					this.getAllEquipment()
-				})
+				this.updateRoomStatus(eqpmt.rid, newRoomStatus)
 			})
 		}
 	}
@@ -206,8 +211,8 @@ class RoomList extends Component {
 		const menu = eq => (
 			<Menu onClick={this.handleStatusUpdate(eq)}>
 				<Menu.Item key='G' name='G'>Healthy</Menu.Item>
-		    	<Menu.Item key='Y' name='Y'>Usable</Menu.Item>
-		    	<Menu.Item key='R' name='R'>Broken</Menu.Item>
+		    <Menu.Item key='Y' name='Y'>Usable</Menu.Item>
+		    <Menu.Item key='R' name='R'>Broken</Menu.Item>
 			</Menu>
 		)
 
@@ -263,17 +268,29 @@ class RoomList extends Component {
 
 			return (
 				<Panel key={r.rid} header={header}>
-					<div style={{ marginTop: 8 }}>
+					<Button.Group style={{ marginTop: 8 }} size='small'>
 						<Button
 							icon='plus'
-							size='small'
 							style={{ marginLeft: 16 }}
 							onClick={() => this.setState({ showAddEqOrLend: true, currentRoom: r.rid })}
 						>
 							Equipment
 						</Button>
-						<Divider style={{ marginBottom: -1 }} />
-					</div>
+            <Dropdown
+              trigger={['click']}
+              overlay={
+                <Menu onClick={this.handleRoomStatusUpdate(r.rid)}>
+          				<Menu.Item key='G' name='G'>Healthy</Menu.Item>
+          		    <Menu.Item key='Y' name='Y'>Usable</Menu.Item>
+          		    <Menu.Item key='R' name='R'>Broken</Menu.Item>
+          			</Menu>
+              }
+              style={{ marginLeft: 16 }}
+            >
+							<Button>Update<Icon type="down" /></Button>
+						</Dropdown>
+					</Button.Group>
+          <Divider style={{ marginBottom: -1 }} />
 					{this.renderLndbleTable(r.rid)}
 					<Table
 						showHeader={false}
