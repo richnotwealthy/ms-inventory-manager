@@ -29,7 +29,7 @@ class RoomList extends Component {
 		showAddEqOrLend: false,
 		currentRoom: null,
 		roomFilter: '',
-		statusFilter: ['G','Y','R']
+		statusFilter: []
 	}
 
 	getAllEquipment = () => {
@@ -211,9 +211,11 @@ class RoomList extends Component {
 		)
 
 		// filter by rstatus
-		roomList = roomList.filter(room =>
-			statusFilter.includes(room.rstatus)
-		)
+		if (statusFilter.length != 0) {
+			roomList = roomList.filter(room =>
+				statusFilter.includes(room.rstatus)
+			)
+		}
 
 		const menu = eq => (
 			<Menu onClick={this.handleStatusUpdate(eq)}>
@@ -348,10 +350,10 @@ class RoomList extends Component {
 							</Button.Group>
 							<span style={{ marginLeft: 16 }}>Status</span>
 							<Select
-								mode="multiple"
+								mode='multiple'
 								style={{ marginLeft: 16, width: '30%' }}
-								placeholder="Filter By Status..."
-								defaultValue={[ 'G','Y','R' ]}
+								placeholder='Status'
+								value={ this.state.statusFilter }
 								onChange={e => this.setState({ statusFilter: e})}
 							>
 								{[
