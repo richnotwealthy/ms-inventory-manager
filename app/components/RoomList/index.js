@@ -7,7 +7,7 @@ import AddEqOrLend from './AddEqOrLend'
 import axios from 'axios'
 import _ from 'lodash'
 import {Card, Collapse, Table, Icon, Button,
-	Menu, Dropdown, Tag, Divider, Popconfirm, Input} from 'antd'
+	Menu, Dropdown, Tag, Divider, Popconfirm, Input, Select} from 'antd'
 const {Panel} = Collapse
 
 const status = {
@@ -28,7 +28,8 @@ class RoomList extends Component {
 		showRoomDeleter: false,
 		showAddEqOrLend: false,
 		currentRoom: null,
-		roomFilter: ''
+		roomFilter: '',
+		statusFilter: []
 	}
 
 	getAllEquipment = () => {
@@ -202,11 +203,19 @@ class RoomList extends Component {
 	}
 
 	renderRooms = () => {
-		let { eqpmtInRooms, roomList, historyPerRoom, roomFilter } = this.state
+		let { eqpmtInRooms, roomList, historyPerRoom, roomFilter, statusFilter } = this.state
 
+		// filter by rid
 		roomList = roomList.filter(({ rid }) =>
 			rid.toLowerCase().indexOf(roomFilter.toLowerCase()) > -1
 		)
+
+		// filter by rstatus
+		if (statusFilter.length != 0) {
+			roomList = roomList.filter(room =>
+				statusFilter.includes(room.rstatus)
+			)
+		}
 
 		const menu = eq => (
 			<Menu onClick={this.handleStatusUpdate(eq)}>
@@ -339,6 +348,20 @@ class RoomList extends Component {
 									onClick={() => this.setState({ showRoomDeleter: true })}
 								/>
 							</Button.Group>
+							<span style={{ marginLeft: 16 }}>Status</span>
+							<Select
+								mode='multiple'
+								style={{ marginLeft: 16, width: '30%' }}
+								placeholder='Status'
+								value={ this.state.statusFilter }
+								onChange={e => this.setState({ statusFilter: e})}
+							>
+								{[
+									<Select.Option key='G'>Healthy</Select.Option>,
+									<Select.Option key='Y'>Working</Select.Option>,
+									<Select.Option key='R'>Broken</Select.Option>
+								]}
+							</Select>
 						</div>
 					)}
 				>
