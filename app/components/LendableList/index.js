@@ -88,7 +88,7 @@ class LendableList extends Component {
 		const menu = lid => (
 			<Menu onClick={this.handleStatusUpdate(lid)}>
 				<Menu.Item key='G' name='G'>Healthy</Menu.Item>
-		    	<Menu.Item key='Y' name='Y'>Usable</Menu.Item>
+		    	<Menu.Item key='Y' name='Y'>Working</Menu.Item>
 		    	<Menu.Item key='R' name='R'>Broken</Menu.Item>
 			</Menu>
 		)

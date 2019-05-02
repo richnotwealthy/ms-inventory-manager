@@ -220,7 +220,7 @@ class RoomList extends Component {
 		const menu = eq => (
 			<Menu onClick={this.handleStatusUpdate(eq)}>
 				<Menu.Item key='G' name='G'>Healthy</Menu.Item>
-		    <Menu.Item key='Y' name='Y'>Usable</Menu.Item>
+		    <Menu.Item key='Y' name='Y'>Working</Menu.Item>
 		    <Menu.Item key='R' name='R'>Broken</Menu.Item>
 			</Menu>
 		)
@@ -290,7 +290,7 @@ class RoomList extends Component {
               overlay={
                 <Menu onClick={this.handleRoomStatusUpdate(r.rid)}>
           				<Menu.Item key='G' name='G'>Healthy</Menu.Item>
-          		    <Menu.Item key='Y' name='Y'>Usable</Menu.Item>
+          		    <Menu.Item key='Y' name='Y'>Working</Menu.Item>
           		    <Menu.Item key='R' name='R'>Broken</Menu.Item>
           			</Menu>
               }

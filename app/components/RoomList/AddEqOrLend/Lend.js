@@ -1,7 +1,13 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Select, Button, message, Alert} from 'antd'
+import {Select, Button, message, Alert, Icon} from 'antd'
 const { Option } = Select
+
+const status = {
+	G: <Icon style={{ color: '#52c41a', marginRight: 8 }} type='check' />,
+	Y: <Icon style={{ color: '#faad14', marginRight: 8 }} type='exclamation' />,
+	R: <Icon style={{ color: '#f5222d', marginRight: 8 }} type='close' />
+}
 
 class Lend extends Component {
 	state = {
@@ -11,10 +17,12 @@ class Lend extends Component {
 		alertRoom: ''
 	}
 
+  getAllLendables = () => axios.get('/db/get/lendables').then(res => {
+    this.setState({ allLendables: res.data })
+  })
+
 	componentDidMount() {
-		axios.get('/db/get/lendables').then(res => {
-			this.setState({ allLendables: res.data })
-		})
+		this.getAllLendables()
 	}
 
 	lendEquipment = () => {
@@ -33,7 +41,8 @@ class Lend extends Component {
 				alertRoom: ''
 			})
 
-			this.props.actions.getAllLendables()
+			this.getAllLendables()
+      this.props.actions.getAllLendables()
 			this.props.actions.hideAddEqOrLend()
 		})
 	}
@@ -103,7 +112,7 @@ class Lend extends Component {
 					filterOption={(val, e) => e.props.children.toLowerCase().indexOf(val.toLowerCase()) > -1}
 				>
 					{this.state.allLendables.map(lndble => (
-						<Option key={lndble.lid}>{lndble.lid + ' - ' + lndble.ltype}</Option>
+						<Option key={lndble.lid}>{status[lndble.lstatus]}{`${lndble.lid} - ${lndble.ltype} from ${lndble.rid ? lndble.rid : 'Storage'}`}</Option>
 					))}
 				</Select>
 				{this.state.alert && (
